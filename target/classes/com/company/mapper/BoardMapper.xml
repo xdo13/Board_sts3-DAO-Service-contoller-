@@ -5,27 +5,26 @@
 <mapper namespace="com.company.mapper.BoardMapper">
   <select id="getList" resultType="com.company.domain.BoardVO">
     <![CDATA[
-    	select * from tbl_board where bno > 0
+    	select * from tbl_board where bno > 0 order by bno desc
     ]]>
   </select>
   
   <insert id="insert">
   	insert into tbl_board (bno, title, content, writer)
-  	values (seq_board.nextval, #{title}, #{content}, #{writer})
+  	values(seq_board.nextval, #{title},#{content},#{writer})
   </insert>
-  
+  	
   <insert id="insertSelectKey">
-  
   	<selectKey keyProperty="bno" order="BEFORE" resultType="long">
   		select seq_board.nextval from dual
   	</selectKey>
   
-	  insert into tbl_board (bno, title, content, writer)
-	  values (#{bno}, #{title}, #{content}, #{writer})
+  	insert into tbl_board (bno, title, content, writer)
+  	values(#{bno}, #{title},#{content},#{writer})
   </insert>
   
   <select id="read" resultType="com.company.domain.BoardVO">
-  	select * from tbl_board where bno = #{bno}
+    	select * from tbl_board where bno = #{bno}
   </select>
   
   <delete id="delete">
@@ -40,4 +39,18 @@
   	updateDate = sysdate
   	where bno = #{bno}
   </update>
-  </mapper>
+  
+  <select id="getListWithPaging" resultType="com.company.domain.BoardVO">
+  	<![CDATA[
+  	 select bno, title, content, writer, regdate, updatedate
+  	 from (
+  	 	select
+  	 	 rownum rn, bno, title, content, writer, regdate, updatedate
+  	 	from tbl_board where rownum <=20
+  	 	)
+  	 	where rn >10
+  	]]>
+  
+  </select>
+  	
+</mapper>
