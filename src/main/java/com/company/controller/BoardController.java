@@ -3,12 +3,15 @@ package com.company.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.company.domain.BoardVO;
+import com.company.domain.Criteria;
+import com.company.domain.PageDTO;
 import com.company.service.BoardService;
 
 import lombok.AllArgsConstructor;
@@ -23,11 +26,19 @@ public class BoardController {
 	private BoardService service;
 	private BoardService boardservice;
 
+//	@GetMapping("/list")
+	//public void list(Model model) {
+//
+	//	log.info("list");
+	//	model.addAttribute("list", service.getList());
+//	}
+	
 	@GetMapping("/list")
-	public void list(Model model) {
-
-		log.info("list");
-		model.addAttribute("list", service.getList());
+	public void list(Criteria cri, Model model) {
+		
+		log.info("list: " + cri);
+		model.addAttribute("list", service.getList(cri));
+		model.addAttribute("pageMaker", new PageDTO(cri, 123));
 	}
 
 	// 등록 처리
@@ -44,7 +55,8 @@ public class BoardController {
 	// 조회 처리
 	
 	@GetMapping({"/get", "/modify"})
-	public void get(@RequestParam("bno") Long bno, Model model) {
+	public void get(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
+		  log.info("/get or modify");
 	      model.addAttribute("board", boardservice.get(bno));
 	}
 
