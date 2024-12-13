@@ -23,5 +23,10 @@ public class Criteria {
 		this.pageNum = pageNum;
 		this.amount = amount;
 	}
+	
+	//TCW(문자열) 
+	public String[] getTypeArr() {
+		return type==null? new String[] {} : type.split("");
+	}
 
 }

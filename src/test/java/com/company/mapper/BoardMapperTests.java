@@ -1,6 +1,8 @@
 package com.company.mapper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -88,6 +90,31 @@ public class BoardMapperTests {
 		List<BoardVO> list= mapper.getListWithPaging(cri);
 		
 		list.forEach(board -> log.info(board.getBno()));
+	}
+	@Test
+	public void testSearch() {
+		Map<String, String> map = new HashMap<String, String>();
+		
+		map.put("T", "1");
+		map.put("C", "테스트");
+		map.put("W", "테스트");
+		
+		Map<String, Map<String, String>> outer = new HashMap<>();
+		
+		outer.put("map", map);
+		
+		List<BoardVO> list = mapper.searchTest(outer);
+		log.info(list);
+	}
+	@Test
+	public void testgetListWithPaging() {
+		Criteria cri = new Criteria();
+		
+		//cri.setKeyword("user00");
+		//cri.setType("TCW");
+		
+		mapper.getListWithPaging(cri)
+		.forEach(list-> log.info(list));
 	}
 
 }

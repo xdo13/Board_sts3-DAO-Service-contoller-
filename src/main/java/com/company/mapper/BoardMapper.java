@@ -1,8 +1,7 @@
 package com.company.mapper;
 
 import java.util.List;
-
-import org.apache.ibatis.annotations.Select;
+import java.util.Map;
 
 import com.company.domain.BoardVO;
 import com.company.domain.Criteria;
@@ -24,5 +23,8 @@ public interface BoardMapper {
 	public int update(BoardVO board);
 	
 	public int getTotalCount(Criteria cri);
+	
+	public List<BoardVO> searchTest(Map<String, Map<String, String>> map);
+	
 
 }
