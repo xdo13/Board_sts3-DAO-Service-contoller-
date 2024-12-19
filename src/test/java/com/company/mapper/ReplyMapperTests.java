@@ -2,6 +2,7 @@ package com.company.mapper;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.company.domain.Criteria;
 import com.company.domain.ReplyVO;
 
 import lombok.extern.log4j.Log4j;
@@ -54,6 +56,22 @@ public class ReplyMapperTests {
 		vo.setReply("4번만 수정");
 		
 		mapper.update(vo);
+	}
+	@Test
+	public void testList() {
+		Criteria cri = new Criteria(2,5);
+		List<ReplyVO> replies = mapper.getListWithPaging(cri, bnoArr[0]);
+		replies.forEach(reply->log.info(reply));
+	}
+	@Test
+	public void testInsert2() {
+		IntStream.rangeClosed(1, 20).forEach(i->{
+			ReplyVO vo = new ReplyVO();
+			vo.setBno(bnoArr[0]);
+			vo.setReply("페이징 테스트"+i);
+			vo.setReplyer("페이징");
+			mapper.insert(vo);
+		});
 	}
 
 }
