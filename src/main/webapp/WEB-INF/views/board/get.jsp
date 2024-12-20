@@ -59,8 +59,33 @@
 <!-- /.row -->
 </div>
 <!-- /#page-wrapper -->
+<script type="text/javascript" src="/resources/js/reply.js"></script>
 <script>
+var bnoValue = ${board.bno};
+console.log("bnoValue");
+console.log("bno: "+ bnoValue);
+
+/* replyService.add(
+		{reply:"js test", replyer:"tester", bno:bnoValue},
+		function(result){
+			alert("REsult : " + result);
+		}
+); */
+/* replyService.getList({bno:bnoValue, page:1}, function(list){
+	for(let i =0; i<list.length; i++){
+		console.log(list[i]);
+	}
+}); */
+replyService.remove(63, function(result){
+	console.log("Result : " + result);
+	if(result === "success"){
+		alert("REMOVES");
+	}
+});
+</script>
+<script type="text/javascript">
 $(document).ready(function(){
+	
 	let operForm = $("#operForm");
 	
 	$("button[data-oper='modify']").click(function(e) {
@@ -75,6 +100,7 @@ $(document).ready(function(){
 		.submit();
 	});
 	
+
 })
 
 </script>
