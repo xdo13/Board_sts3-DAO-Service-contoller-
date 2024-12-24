@@ -73,39 +73,122 @@
 	</div>
 
 </div>
-<!-- /.panel-body -->
+<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel" aria-hidden="true">
+	 	<div class="modal-dialog">
+	 	  <div class="modal-content">
+	 	    <div class="modal-header">
+	 	       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	 	       <h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
+	 	    </div>
+	 	    <div class="modal-body">
+	 	      <div class="form-group">
+	 	      	<label>Reply</label>
+	 	      	<input class= "form-control" name='reply' value='New Reply!!!'>
+	 	      </div>
+	 	      <div class="form-group">
+	 	      <label>Replyer</label>
+	 	      	<input class= "form-control" name='replyer' value='replyer'>
+	 	      </div>
+	 	      <div class="form-group">
+	 	      	<label>Reply Date</label>
+	 	      	<input class= "form-control" name='replyDate' value='2024-12-24 17:27'>
+	 	      </div>
+	 	      
+	 	     </div>
+	 	     <div class="modal-footer">
+	 	     	<button id='modalModBtn' type="button" class="btn btn-warning">Modify</button>
+	 	     	<button id='modalRemoveBtn' type="button" class="btn btn-danger">Remove</button>
+	 	     	<button id='modalRegisterBtn' type="button" class="btn btn-primary">Register</button>
+	 	     	<button id='modalCloseBtn' type="button" class="btn btn-default">Close</button>
+	 	     </div>
+	 	    </div>
+	 	</div>
+	 </div>
 
-<!-- /.panel -->
 
-<!-- /.col-lg-12 -->
 
-<!-- /.row -->
+
+
+
+
+
 
 <!-- /#page-wrapper -->
 <script type="text/javascript" src="/resources/js/reply.js"></script>
 <script type="text/javascript">
 
-$(document).ready(function(){
-	let bnoValue = '${board.bno}';
-	let replyUL = $(".chat");
-	
+$(document).ready(function() {
+  
+	var bnoValue = '${board.bno}';
+	var replyUL = $(".chat");
+
 	showList(1);
+	    
+	 function showList(page){
+	  
+                 replyService.getList({bno:bnoValue,page: page|| 1 }, function(list) {
+	   	 
+	      var str="";
+	      
+	      if(list == null || list.length == 0){
+	          replyUL.html();
+	    	  return;
+	      }
+	      
+	      
+	      for (let i = 0, len = list.length || 0; i < len; i++) {
+	          str +="<li class='left clearfix' data-rno='"+list[i].rno+"'>";
+	          str +="  <div><div class='header'><strong class='primary-font'>["
+	       	   +list[i].rno+"] "+list[i].replyer+"</strong>"; 
+	          str +="    <small class='pull-right text-muted'>"
+	              +replyService.displayTime(list[i].replyDate)+"</small></div>";
+	          str +="    <p>"+list[i].reply+"</p></div></li>";
+	        }
+	        
+	        
+	        replyUL.html(str);
 	
-	console.log(bnoValue);
-	console.log(replyUL);
+		 }); //end function
+	}  //end showList
+	
+	let modal = $(".modal");
+	let modalInputReply = modal.find("input[name='reply']");
+	let modalInputReplyer = modal.find("input[name='replyer']");
+	let modalInputReplyDate = modal.find("input[name='replyDate']");
+	
+	let modalModBtn = $("#modalModBtn");
+	let modalRemoveBtn = $("#modalRemoveBtn");
+	let modalRegisterBtn = $("#modalRegisterBtn");
+	
+	
+	$("#addReplyBtn").on("click", function(e){
+		
+		modal.find("input").val("");
+		modalInputReplyDate.closest("div").hide();
+		modal.find("button[id != 'modalCloseBtn']").hide();
+		
+		modalRegisterBtn.show();
+		$(".modal").modal("show");
+		
+		
+	}); //end addReplyBtn
+	
+	
 });
 
 
-	/* var bnoValue = '<c:out value="${board.bno}"/>';
+/* 	  var bnoValue = '<c:out value="${board.bno}"/>';
 	console.log("bnoValue");
-	console.log("bno: " + bnoValue); */
+	console.log("bno: " + bnoValue); 
 
-	/*  replyService.add(
+	 replyService.add(
 	 {reply:"js test", replyer:"tester", bno:bnoValue},
 	 function(result){
 	 alert("REsult : " + result);
 	 }
-	 );  */
+	 );   */ 
 	/*  replyService.getList({bno:bnoValue, page:1}, function(list){
 	 for(let i =0; i<list.length; i++){
 	 console.log(list[i]);
