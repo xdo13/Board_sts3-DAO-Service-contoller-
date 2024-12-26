@@ -128,7 +128,13 @@ $(document).ready(function() {
 	    
 	 function showList(page){
 	  
-                 replyService.getList({bno:bnoValue,page: page|| 1 }, function(list) {
+             replyService.getList({bno:bnoValue,page: page|| 1 }, function(replyCnt, list) {
+               	 
+           	 if(page == -1){
+           		 pageNum = Math.ceil(replyCnt/10.0);
+           		 showList(pageNum);
+           		 return;
+           	 }
 	   	 
 	      var str="";
 	      
@@ -149,10 +155,65 @@ $(document).ready(function() {
 	        
 	        
 	        replyUL.html(str);
+	        
+	        showReplyPage(replyCnt);
 	
 		 }); //end function
 	}  //end showList
 	
+	let pageNum = 1;
+	let replyPageFooter = $(".panel-footer");
+	
+	  function showReplyPage(replyCnt){
+		  let endNum = Math.ceil(pageNum / 10.0) *10;
+		  let startNum = endNum - 9;
+		  
+		  let prev = startNum != 1;
+		  let next = false;
+		  
+		  if(endNum * 10 >= replyCnt){
+			  endNum = Math.ceil(replyCnt/10.0);
+		  }
+		  
+		  if(endNum * 10 < replyCnt) {
+			  next = true;
+		  }
+		  
+		  let str = "<ul class='pagination pull-right'>";
+		  
+		  if(prev){
+			  str+= "<li class='page-item'><a class='page-link' href='" + (startNum - 1)+"'>Previous</a></li>";
+		  }
+		  for(let i = startNum; i <=endNum; i++){
+			  
+			  let active = pageNum == i ? "active":"";
+			  
+			  str += "<li class='page-item "+active+" '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+		  }
+		  
+		  if(next) {
+			  str += "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'>Next</a></li>";
+		  }
+		  str += "</ul></div>";
+		  
+		  console.log(str);
+		  
+		  replyPageFooter.html(str);
+	  }
+	  
+	  replyPageFooter.on("click","li a", function(e){
+		  e.preventDefault();
+		  console.log("page click");
+		  
+		  let targetPageNum = $(this).attr("href");
+		  
+		  console.log("targetPageNum: " + targetPageNum);
+		  
+		  pageNum = targetPageNum;
+		  
+		  showList(pageNum);
+	  });
+		//페이징 처리 끝
 	let modal = $(".modal");
 	let modalInputReply = modal.find("input[name='reply']");
 	let modalInputReplyer = modal.find("input[name='replyer']");
@@ -191,7 +252,7 @@ $(document).ready(function() {
 			modal.modal("hide");
 			
 			//showList(-1);
-			showList(1);
+			showList(pageNum);
 		});
 	});
 	
@@ -224,7 +285,8 @@ $(document).ready(function() {
 			
 			alert(result);
 			modal.modal("hide");
-			showList(1);
+			//showList(1);
+			showList(pageNum);
 		});
 	}); //end modalModBtn
 	

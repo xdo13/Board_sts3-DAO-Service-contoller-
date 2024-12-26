@@ -19,6 +19,8 @@ public interface ReplyMapper {
 	public List<ReplyVO> getListWithPaging(
 			@Param("cri") Criteria cri,
 			@Param("bno") Long bno);
+	
+	public int getCountByBno(Long bno); //bno에 해당하는 댓글 숫자 구하기
 		
 	
 

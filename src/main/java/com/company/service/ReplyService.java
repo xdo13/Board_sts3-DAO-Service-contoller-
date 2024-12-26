@@ -3,6 +3,7 @@ package com.company.service;
 import java.util.List;
 
 import com.company.domain.Criteria;
+import com.company.domain.ReplyPageDTO;
 import com.company.domain.ReplyVO;
 
 public interface ReplyService {
@@ -15,5 +16,7 @@ public interface ReplyService {
 	public int remove(Long rno);
 	
 	public List<ReplyVO> getList(Criteria cri, Long bno);
+	
+	public ReplyPageDTO getListPage(Criteria cri, Long bno);
 
 }

@@ -1,5 +1,3 @@
-console.log("Reply Module.........");
-
 let replyService = (function() {
   function add(reply, callback, error) {
     console.log("add reply.........");
@@ -27,18 +25,14 @@ let replyService = (function() {
     let bno = param.bno;
     let page = param.page || 1;
 
-    $.ajax({
-      type: "get",
-      url: "/replies/pages/" + bno + "/" + page + ".json",
-      success: function(result, status, xhr) {
+    $.getJSON("/replies/pages/" + bno + "/" + page + ".json", function(data){
         if (callback) {
-          callback(result);
+          //callback(result);
+          callback(data.replyCnt, data.list);
         }
-      },
-      error: function(xhr, status, er) {
-        if (error) {
-          error(er);
-        }
+    }).fail(function(xhr, status, err){
+      if (error) {
+        error();
       }
     });
   }
